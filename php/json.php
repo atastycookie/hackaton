@@ -229,44 +229,18 @@ p 		  {margin:0; padding:0; font-family: arial;}
 ';
 
 
-//echo $html;
+$to      = 'ant1freezeca@gmail.com';
+$subject = 'Оплати счет, '.trim($output->client->name);
+$message = $html;
+$headers  = 'MIME-Version: 1.0' . "\r\n";
+$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
-$mpdf->WriteHTML($html);
+mail($to, $subject, $message, $headers);
+
+echo $html;
+
+ //$mpdf->WriteHTML($html);
  //$mpdf->Output('YMHackaton-'.$output->details->number.'.pdf', 'D'); exit;
-
-
-$content = $mpdf->Output('', 'S');
-
-$content = chunk_split(base64_encode($content));
-$mailto = 'ant1freezeca@gmail.com'; //Mailto here
-$from_name = 'test'; //Name of sender mail
-$subject = 'subjecthere'; 
-$message = 'mailmessage';
-$filename = "yourfilename-".date("d-m-Y_H-i",time()); //Your Filename whit local date and time
-
-//Headers of PDF and e-mail
-$boundary = "XYZ-" . date("dmYis") . "-ZYX"; 
-
-$header = "--$boundary\r\n"; 
-$header .= "Content-Transfer-Encoding: 8bits\r\n"; 
-$header .= "Content-Type: text/html; charset=ISO-8859-1\r\n\r\n"; //plain 
-$header .= "$message\r\n";
-$header .= "--$boundary\r\n";
-$header .= "Content-Type: application/pdf; name=\"".$filename."\"\r\n";
-$header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n";
-$header .= "Content-Transfer-Encoding: base64\r\n\r\n";
-$header .= "$content\r\n"; 
-$header .= "--$boundary--\r\n";
-
-$header2 = "MIME-Version: 1.0\r\n";
-$header2 .= "From: ".$from_name." \r\n"; 
-$header2 .= "Return-Path: $from_mail\r\n";
-$header2 .= "Content-type: multipart/mixed; boundary=\"$boundary\"\r\n";
-$header2 .= "$boundary\r\n";
-
-mail($mailto,$subject,$header,$header2, "-r".$from_mail);
-
-$mpdf->Output($filename ,'I');
 
 
 

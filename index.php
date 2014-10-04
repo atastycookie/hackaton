@@ -127,6 +127,7 @@ $(document).ready(function(){
 	<!-- <p>Bill Gates,<br>Palo Alto,<br>Infinite Loop,<br>California, US.<br></p> -->
 	<ul>
 		<li class="client-data"><input type="text" name="client-name" class="client-name" value="" placeholder="Имя клианта" /></li>
+		<li class="client-data"><input type="text" name="client-email" class="client-email" value="" placeholder="email клиента" /></li>
 		<li class="client-data">
 		<!--<input type="text" name="client-address" value="Roman Ananyev" placeholder="Address" />-->
 		<textarea name="client-address" class="client-address" placeholder="Адрес"></textarea>
@@ -433,6 +434,8 @@ $(document).ready(function(){
 	
 	function grab_invoice_data()
 	{
+		//payment
+		invoice_data.payment.yandexmoney	= $('.inv-yandexmoney').val();
 
 		//details
 		invoice_data.details.number   = $('.inv-number').val();
@@ -440,6 +443,7 @@ $(document).ready(function(){
 		invoice_data.details.due_date = $('.inv-due-date').val();
 		
 		//client
+		invoice_data.client.email      = $('.client-email').val();
 		invoice_data.client.name       = $('.client-name').val();
 		invoice_data.client.address    = encodeURIComponent($('.client-address').val());
 		invoice_data.client.city	   = $('.client-city').val();
@@ -525,9 +529,9 @@ $(document).ready(function(){
 
 		"details":{
 		
-				"number":"16555482",
-				"date":"13-06-2013",
-				"due_date":"13-07-2013"
+				"number":"007",
+				"date":"11-06-2014",
+				"due_date":"11-07-2014"
 		},
 		"client":{
 				"name" : "",
