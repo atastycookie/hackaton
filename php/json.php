@@ -87,13 +87,12 @@ $html =
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
+<meta http-equiv=«Content-Type» content=«text/html; charset=utf-8»>
 <style>
 
 body,html {font-family: arial;}
 p 		  {margin:0; padding:0; font-family: arial;}
 
-/*///// HEADER /////////////////////////////*/
 #header          {width:200px; height:100px; }
 #header .title   { height: 35px; background:#84c060; }
 #header .title p { height: 22px; max-height: 22px; font-size:18px; color:white; font-weight:; line-height: 18px; padding-top:9px; padding-left:10px; background:#84c060; }
@@ -103,7 +102,6 @@ p 		  {margin:0; padding:0; font-family: arial;}
 .detail { float:right; width:110px; text-align:right;  color:#3B3B3B;}
 .invoice-number p,.date p,.due-date p{font-size:12px; line-height:13px;}
 
-/*///// CLIENT/COMPANY //////////////////////*/
 #client-company-wrap {width:720px; height:auto; overflow:hidden;}
 #client { float:left; width:200px; height:auto; }
 #company { float:right; width:200px; height:auto; }
@@ -115,7 +113,6 @@ p 		  {margin:0; padding:0; font-family: arial;}
 #company .company-details p { color:#3B3B3B; font-size:14px; line-height:14px; }
 
 
-/*///// LIST MENU /////////////////////*/
 #list{width:720px; height:40px; ; background-color:;}
 #item,#qty,#price,#discount,#subtotal{width:80px; height: 40px; text-align:center; font-size:15px; background-color:#84c060; float:left;border-left:1px solid #7ab357;}
 #item p,#qty p,#price p,#discount p,#subtotal p{line-height: 16px; padding-top:12px; color:white;}
@@ -123,7 +120,6 @@ p 		  {margin:0; padding:0; font-family: arial;}
 #item p {margin-left:10px;}
 #qty, #discount {background-color:#8bc368;}
 
-/*///// ITEMS TABLE /////////////////////*/
 #invoice-items   { width: 720px; height:auto; } 
 
 #invoice-items .white,#invoice-items .gray{width: auto;height: 39px; border-bottom:1px solid #eaeaea;}
@@ -136,16 +132,12 @@ p 		  {margin:0; padding:0; font-family: arial;}
 .item-cell p 	  {margin-left:10px;}
 /* .qty-cell,.price-cell,.discount-cell,.subtotal-cell { border-top:1px solid white } */
 
-
-/*grand totals*/
 #totals { height: 90px; width: 184px; margin-top: 20px; float:right; font-size:16px }
 #totals .left-item { background:; width: 64px; height:20px; float:left}
 .grand-subtotal, .grand-vat, .grand-total {width: 95px; padding-right:5px; ; height:20px; float:left; text-align:right; font-weight:bold;}
 .grand-vat {width: 32px; text-align:right; padding:0; margin-right:7px; float:right;}
 .grand-divider { height:2px; width: 178px; border-bottom:1px solid #000; margin-bottom:8px; }
 
-
-/* notes */
 #notes-wrap {width:510px; margin-left:10px; margin-top: 90px; height: 100px;}
 #notes-wrap .notes {width: 510px; height:50px; color:#666; }
 
@@ -222,7 +214,7 @@ p 		  {margin:0; padding:0; font-family: arial;}
 
 <div style="height: 22px; width:inherit;" >
 <div class="left-item" style="width:38px;">Total </div><div style="float:left; width:38px;" >'.$output->totals->currency.'</div><div class="grand-total" style="width:100px;">'.$output->totals->grand_total.'</div>
-<iframe frameborder="0" allowtransparency="true" scrolling="no" src="https://money.yandex.ru/embed/small.xml?account=410011680044609&quickpay=small&yamoney-payment-type=on&button-text=01&button-size=m&button-color=orange&targets=1&default-sum='.$output->totals->grand_total.'&successURL=" width="229" height="54"></iframe>
+<iframe frameborder="0" allowtransparency="true" scrolling="no" src="https://money.yandex.ru/embed/small.xml?account=410011680044609&quickpay=small&yamoney-payment-type=on&button-text=01&button-size=m&button-color=orange&targets=1&default-sum='.$output->totals->grand_total.'&fio=on&mail=on&successURL=" width="229" height="54"></iframe>
 </div>
 </div>
 
@@ -236,10 +228,45 @@ p 		  {margin:0; padding:0; font-family: arial;}
 </html>
 ';
 
- echo $html;
 
- //$mpdf->WriteHTML($html);
+//echo $html;
+
+$mpdf->WriteHTML($html);
  //$mpdf->Output('YMHackaton-'.$output->details->number.'.pdf', 'D'); exit;
+
+
+$content = $mpdf->Output('', 'S');
+
+$content = chunk_split(base64_encode($content));
+$mailto = 'ant1freezeca@gmail.com'; //Mailto here
+$from_name = 'test'; //Name of sender mail
+$subject = 'subjecthere'; 
+$message = 'mailmessage';
+$filename = "yourfilename-".date("d-m-Y_H-i",time()); //Your Filename whit local date and time
+
+//Headers of PDF and e-mail
+$boundary = "XYZ-" . date("dmYis") . "-ZYX"; 
+
+$header = "--$boundary\r\n"; 
+$header .= "Content-Transfer-Encoding: 8bits\r\n"; 
+$header .= "Content-Type: text/html; charset=ISO-8859-1\r\n\r\n"; //plain 
+$header .= "$message\r\n";
+$header .= "--$boundary\r\n";
+$header .= "Content-Type: application/pdf; name=\"".$filename."\"\r\n";
+$header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n";
+$header .= "Content-Transfer-Encoding: base64\r\n\r\n";
+$header .= "$content\r\n"; 
+$header .= "--$boundary--\r\n";
+
+$header2 = "MIME-Version: 1.0\r\n";
+$header2 .= "From: ".$from_name." \r\n"; 
+$header2 .= "Return-Path: $from_mail\r\n";
+$header2 .= "Content-type: multipart/mixed; boundary=\"$boundary\"\r\n";
+$header2 .= "$boundary\r\n";
+
+mail($mailto,$subject,$header,$header2, "-r".$from_mail);
+
+$mpdf->Output($filename ,'I');
 
 
 
