@@ -16,6 +16,7 @@ $size = array('1'=>'58','2'=>'87','3'=>'116','4'=>'174','5'=>'232','6'=>'290');
         <div class="col-md-12">
             <ul class="nav nav-tabs" id="myTab">
               <li class="active"><a href="#ympay"><i class="fa fa-money"></i> Яндекс.Деньги</a></li>
+              <li><a href="#ymkassa"><i class="fa fa-money"></i> Яндекс.Касса</a></li>
             </ul> 
         </div>
     </div>
@@ -63,6 +64,49 @@ $size = array('1'=>'58','2'=>'87','3'=>'116','4'=>'174','5'=>'232','6'=>'290');
         		</div>
    			 </form>
                   </div>
+
+                  <div class="tab-pane active" id="ymkassa">
+                    <form action="" method="post" class="form-horizontal">
+                       <input class="form-control" type="hidden" name="id" value="ymkassa">
+                      <div class="form-group">
+                    <label class="col-md-2 control-label" for="emailtopay">email к оплате</label>
+                        <div class="col-md-10">
+                            <input class="form-control" type="text" name="ymnumber" value="<?php if(isset($_POST['ymnumber'])) echo $_POST['ymnumber'];?>" required="required">
+                        </div>
+                    </div>  
+                    <div class="form-group">
+                    <label class="col-md-2 control-label" for="summ">Сумма к оплате</label>
+                        <div class="col-md-10">      
+                        <input class="form-control" type="summ" name="summ" value="<?php if(isset($_POST['summ'])) echo $_POST['summ'];?>" required="required">
+                     </div>
+                    </div> 
+                    <div class="form-group">
+                    <label class="col-md-2 control-label" for="forwhat">За что платить будут?</label>
+                        <div class="col-md-10">      
+                        <input class="form-control" type="forwhat" name="forwhat" value="<?php if(isset($_POST['forwhat'])) echo $_POST['forwhat'];?>" required="required">
+                     </div>
+                    </div> 
+                    <div class="form-group">
+                    <label class="col-md-2 control-label" for="img_size">Размер куркода  (px)</label>
+                        <div class="col-md-2">  
+                        <select class="form-control" name="img_size">
+                            <?php foreach($size as $k=>$v){?>
+                                <option value="<?php echo $v?>" <?php if(isset($_POST['img_size']) && $_POST['img_size'] == $v){ echo "selected";}
+                                elseif(!isset($_POST['img_size']) && $k == 5){ echo "selected";}
+                                ?>><?php echo $v?></option>
+                            <?php }?>
+                        </select>
+                     </div>
+                    </div>
+                 <hr>   
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-qrcode"></i> Создать куркод</button>
+                    </div>
+                </div>
+             </form>
+                  </div>
+
 
         </div>
                  

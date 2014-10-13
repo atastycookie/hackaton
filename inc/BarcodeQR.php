@@ -39,6 +39,21 @@ final class BarcodeQR {
 	}	
 
 	/**
+	 * ympay code
+	 *
+	 * @param string $ymkassa
+	 * @param string $summ
+	 * @param string $forwhat
+	 */
+
+	public function ymkassa($emailtopay = null, $summ = null, $forwhat = null) {
+	
+		$url = "money.yandex.ru/eshop.xml?shopId=&scid=&customerNumber={emailtopay}&sum={summ}&paymentType=AC&customerEmail={emailtopay}";
+		$this->_data = preg_match("#^https?\:\/\/#", $url) ? $url : "https://{$url}";	
+		
+	}	
+
+	/**
 	 * Generate QR code image
 	 *
 	 * @param int $size
